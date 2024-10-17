@@ -127,11 +127,29 @@
 
     document.body.appendChild(script);
 
+    let messageFromIframeOpener = null;
+
     // Unity-browser interaction code
     window.unityOnReadyFunction = () => {
       // MyGameInstance.SendMessage(objectName, methodName, value);
-      MyGameInstance.SendMessage('LoginCodes', 'ReceiveBrowserMessage', "Secret message sent from index.html")
+      if (messageFromIframeOpener !== null) {
+        MyGameInstance.SendMessage('LoginCodes', 'ReceiveBrowserMessage', messageFromIframeOpener)
+      }
     }
+
+    window.addEventListener(
+      "message",
+      (event) => {
+        // We definitely need this for actual build but for this demo disabling (https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage#security_concerns)
+        // if (event.origin !== "https://play.myneighboralice.com/") return;
+
+        messageFromIframeOpener = event.data;
+        if (MyGameInstance !== null) {
+          MyGameInstance.SendMessage('LoginCodes', 'ReceiveBrowserMessage', messageFromIframeOpener)
+        }
+      },
+      false,
+    );
   </script>
 </body>
 
