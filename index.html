@@ -144,9 +144,7 @@
         // if (event.origin !== "https://play.myneighboralice.com/") return;
 
         console.log("Unity webpage received event:", event.data)
-        console.log(event.data.type)
         if (event.data.type === 'setText') {
-          console.log(event.data.value);
           messageFromIframeOpener = event.data.value;
 
           if (MyGameInstance !== null) {
