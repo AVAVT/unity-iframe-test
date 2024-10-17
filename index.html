@@ -143,13 +143,21 @@
         // We definitely need this for actual build but for this demo disabling (https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage#security_concerns)
         // if (event.origin !== "https://play.myneighboralice.com/") return;
 
-        messageFromIframeOpener = event.data;
-        if (MyGameInstance !== null) {
-          MyGameInstance.SendMessage('LoginCodes', 'ReceiveBrowserMessage', messageFromIframeOpener)
+        console.log("Unity webpage received event:", event.data)
+        console.log(event.data.type)
+        if (event.data.type === 'setText') {
+          console.log(event.data.value);
+          messageFromIframeOpener = event.data.value;
+
+          if (MyGameInstance !== null) {
+            MyGameInstance.SendMessage('LoginCodes', 'ReceiveBrowserMessage', messageFromIframeOpener)
+          }
         }
       },
       false,
     );
+
+    window.parent?.postMessage({ type: 'sceneReady' }, '*');
   </script>
 </body>
 
